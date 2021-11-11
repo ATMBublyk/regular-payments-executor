@@ -1,1 +1,0 @@
-curl -d '{"name": "hacked", "reading": 1337}' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vMTAuMTAuMC4yLyIsInN1YiI6InNlbnNvcmJvdCIsImV4cCI6MTk4NzY1NDMyMX0.2odrf2_DtfK6XSu2AMAKOegnDnIbGbDANhEDbV6ewPQ" -H "Content-Type: application/json" -X POST http://10.10.0.2:5000/sensors
