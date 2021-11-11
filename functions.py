@@ -51,7 +51,6 @@ def change_next_payment_date(account: Account, session):
         raise Exception('incorrect periodicity')
     regular_transfer_model.next_payment_date = account.next_payment_date
     regular_transfer_model.save_to_db()
-    print('changing next payment date')
 
 
 def update_regular_transfers(session):
@@ -67,7 +66,4 @@ def update_regular_transfers(session):
         if account.access_token == "":
             access_token = login(account.card_number, account.pin)
             account.add_access_token(access_token)
-            print('successfully logged in')
-        else:
-            print('past logged in')
     return accounts
