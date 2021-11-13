@@ -33,7 +33,9 @@ def make_transfer(destination_card: str, amount: float, access_token: str, accou
     response = requests.post(url=TRANSFER_URL, data=data, headers=headers)
     print(response)
     if response.status_code != 201:
+        print(f"Status code is not 201, it is {response.status_code}")
         return False
+    print("successfully make transfer")
     return True
 
 
