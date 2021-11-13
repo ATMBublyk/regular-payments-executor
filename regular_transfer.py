@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
-engine = create_engine(os.environ.get('DATABASE_URI'))
+engine = create_engine('postgresql://lxoxahalzpfums:44af64654c0c9cad1a5600aeb784ca48ddad5a4845ec780bd6ffe4dc451fe707@ec2-54-220-53-223.eu-west-1.compute.amazonaws.com:5432/dae576orog172q')
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 

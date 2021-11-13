@@ -8,6 +8,7 @@ __pycache__/
 
 # custom gitignore
 data.db
+data.json
 
 # C extensions
 *.so

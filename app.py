@@ -1,4 +1,6 @@
+import io
 import time
+import json
 from datetime import datetime
 
 from functions import login, make_transfer, change_next_payment_date, update_regular_transfers
@@ -9,6 +11,12 @@ try:
     while True:
         accounts = update_regular_transfers(session)
         for account in accounts:
+            with open('data.json', 'w') as file:
+                try:
+                    account.next_payment_date = json.load(file)[account.card_number]
+                except io.UnsupportedOperation:
+                    pass
+
             current_date = datetime.utcnow()
             if account.next_payment_date.date() == current_date.date():
                 if account.next_payment_date.hour == current_date.hour and \
