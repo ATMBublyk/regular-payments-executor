@@ -1,3 +1,4 @@
+import io
 import json
 import os
 from datetime import timedelta
@@ -42,6 +43,8 @@ def make_transfer(destination_card: str, amount: float, access_token: str, accou
 
 
 def change_next_payment_date(account: Account, session):
+    regular_transfer_model: RegularTransferModel = session.query(RegularTransferModel).filter_by(
+        id=account.regular_transfer_id).first()
     if account.periodicity == 'everyday':
         account.next_payment_date += timedelta(days=1)
     elif account.periodicity == 'weekly':
@@ -52,18 +55,21 @@ def change_next_payment_date(account: Account, session):
         account.next_payment_date += relativedelta(years=1)
     else:
         raise Exception('incorrect periodicity')
+    regular_transfer_model.next_payment_date = account.next_payment_date
+    regular_transfer_model.save_to_db()
+
     # saving to file
-    if os.path.isfile('./data.json'):
-        with open('data.json', 'r') as file:
-            data: dict = json.load(file)
-            data[account.card_number] = account.next_payment_date
-        with open('data.json', 'w') as file:
-            json.dump(data, file)
-    else:
-        with open('data.json', 'w') as file:
-            data = dict()
-            data[account.card_number] = account.next_payment_date
-            json.dump(data, file)
+    # data = dict()
+    # try:
+    #     with open('data.json', 'r') as file:
+    #         data: dict = json.load(file)
+    #         data[account.card_number] = account.next_payment_date
+    # except Exception:
+    #     pass
+    #
+    # with open('data.json', 'w') as file:
+    #     data[account.card_number] = account.next_payment_date.isoformat()
+    #     json.dump(data, file)
 
 
 def update_regular_transfers(session):
@@ -73,7 +79,7 @@ def update_regular_transfers(session):
     for regular_transfer in regular_transfers:
         accounts.append(Account(regular_transfer.card, regular_transfer.pin, regular_transfer.destination_card,
                                 regular_transfer.amount, regular_transfer.periodicity,
-                                regular_transfer.first_payment_date, regular_transfer.id))
+                                regular_transfer.first_payment_date, regular_transfer.id, regular_transfer.next_payment_date))
     # login to accounts
     for account in accounts:
         if account.access_token == "":

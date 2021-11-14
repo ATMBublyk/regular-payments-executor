@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 from sqlalchemy import Column, Integer, String, DateTime, Float, create_engine, select, text
 from sqlalchemy.ext.declarative import declarative_base
@@ -6,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
-engine = create_engine(os.environ.get('DATABASE_URI'))
+engine = create_engine('postgresql://lxoxahalzpfums:44af64654c0c9cad1a5600aeb784ca48ddad5a4845ec780bd6ffe4dc451fe707@ec2-54-220-53-223.eu-west-1.compute.amazonaws.com:5432/dae576orog172q')
 Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 
@@ -39,3 +40,12 @@ class RegularTransferModel(Base):
     def save_to_db(self):
         session.add(self)
         session.commit()
+
+
+if __name__ == '__main__':
+    regular_transfers = session.execute(select(RegularTransferModel)).scalars().all()
+    for regular_transfer in regular_transfers:
+        regular_transfer.next_payment_date += timedelta(days=1)
+        print(regular_transfer.next_payment_date)
+        regular_transfer.save_to_db()
+

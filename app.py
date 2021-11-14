@@ -11,11 +11,12 @@ try:
     while True:
         accounts = update_regular_transfers(session)
         for account in accounts:
-            with open('data.json', 'w') as file:
-                try:
-                    account.next_payment_date = json.load(file)[account.card_number]
-                except io.UnsupportedOperation:
-                    pass
+            # with open('data.json', 'r') as file:
+            #     try:
+            #         next_payment_date_str = json.load(file)[account.card_number]
+            #         account.next_payment_date = datetime.strptime(next_payment_date_str, "%Y-%m-%dT%H:%M:%S")
+            #     except json.decoder.JSONDecodeError as e:
+            #         print(e)
 
             current_date = datetime.utcnow()
             if account.next_payment_date.date() == current_date.date():
