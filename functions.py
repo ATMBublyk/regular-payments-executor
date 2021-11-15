@@ -31,10 +31,10 @@ def make_transfer(destination_card: str, amount: float, access_token: str, accou
     data = {
         "destinationCard": destination_card,
         "amount": amount,
-        "is_regular": True
+        "isRegular": True
     }
     response = requests.post(url=TRANSFER_URL, data=data, headers=headers)
-    print(response)
+    print(response.json().get('message'))
     if response.status_code != 201:
         print(f"Status code is not 201, it is {response.status_code}")
         return False
